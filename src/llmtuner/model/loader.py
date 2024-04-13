@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 logger = get_logger(__name__)
 
 
-require_version("transformers>=4.36.2", "To fix: pip install transformers>=4.36.2")
+require_version("transformers>=4.34.0", "To fix: pip install transformers>=4.34.0")
 require_version("datasets>=2.14.3", "To fix: pip install datasets>=2.14.3")
 require_version("accelerate>=0.21.0", "To fix: pip install accelerate>=0.21.0")
 require_version("peft>=0.7.0", "To fix: pip install peft>=0.7.0")
@@ -46,12 +46,21 @@ def load_model_and_tokenizer(
         "token": model_args.hf_hub_token
     }
 
+
+    model = AutoModelForCausalLM.from_pretrained(
+        model_args.model_name_or_path,
+        trust_remote_code=True,
+        cache_dir=None,
+        revision='main',
+        token=None
+    )
+
     tokenizer = AutoTokenizer.from_pretrained(
         model_args.model_name_or_path,
         use_fast=model_args.use_fast_tokenizer,
-        split_special_tokens=model_args.split_special_tokens,
-        padding_side="right",
-        **config_kwargs
+        # split_special_tokens=model_args.split_special_tokens,
+        # padding_side="right",
+        # **config_kwargs
     )
     patch_tokenizer(tokenizer)
 

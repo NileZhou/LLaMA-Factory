@@ -8,6 +8,7 @@ from transformers import GenerationConfig, TextIteratorStreamer
 from llmtuner.data.template import get_template_and_fix_tokenizer
 from llmtuner.extras.misc import get_logits_processor
 from llmtuner.model import dispatch_model, get_infer_args, load_model_and_tokenizer
+from torch.cuda.amp import autocast
 
 
 @dataclass
@@ -116,6 +117,10 @@ class ChatModel:
 
         return results
 
+    def auto_cast_generate(self, **kwargs):
+        with autocast():
+            return self.model.generate(**kwargs)
+
     @torch.inference_mode()
     def stream_chat(
         self,
@@ -128,7 +133,7 @@ class ChatModel:
         streamer = TextIteratorStreamer(self.tokenizer, timeout=60.0, skip_prompt=True, skip_special_tokens=True)
         gen_kwargs["streamer"] = streamer
 
-        thread = Thread(target=self.model.generate, kwargs=gen_kwargs)
+        thread = Thread(target=self.auto_cast_generate, kwargs=gen_kwargs)
         thread.start()
 
         yield from streamer

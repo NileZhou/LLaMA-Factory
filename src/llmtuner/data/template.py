@@ -563,6 +563,51 @@ register_template(
     sep=[]
 )
 
+register_template(
+    name="phi2_qa",
+    prefix=[
+        "{{system}}"
+    ],
+    prompt=[
+        "[INST] Instruct: {{query}} [/INST]\nOutput:"
+    ],
+    system=(
+        "This is a QA session. Provide a clear and concise question in the instruction, "
+        "and the model will respond after the 'Output:'."
+    ),
+    sep=[]
+)
+
+register_template(
+    name="phi2_chat",
+    prefix=[
+        "{{system}}"
+    ],
+    prompt=[
+        "Alice: {{query}} \n\nBob:"
+    ],
+    system=(
+        "This is a dialogue scenario. Start by providing Alice's part in the dialogue instruction, "
+        "and continue the conversation as Bob after the prompt."
+    ),
+    sep=[]
+)
+
+register_template(
+    name="phi2_code",
+    prefix=[
+        "{{system}}"
+    ],
+    prompt=[
+        "[CODE] Instruct: {{query}} [/CODE]\n\nOutput:"
+    ],
+    system=(
+        "This is a coding task. Provide the instructions or questions related to the code in the instruction, "
+        "and the model will respond with the code after 'Output:'."
+    ),
+    sep=[]
+)
+
 
 register_template(
     name="mistral",

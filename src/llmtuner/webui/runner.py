@@ -1,7 +1,7 @@
 import os
 import time
 import logging
-import gradio as gr
+# import gradio as gr
 from threading import Thread
 from gradio.components import Component # cannot use TYPE_CHECKING here
 from typing import TYPE_CHECKING, Any, Dict, Generator, Optional, Tuple
